@@ -1,17 +1,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as assets from '@aws-cdk/assets';
 import * as iam from '@aws-cdk/aws-iam';
-import * as kms from '@aws-cdk/aws-kms';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
 import * as cxapi from '@aws-cdk/cx-api';
 import { Construct } from 'constructs';
-import { toSymlinkFollow } from './compat';
 
 const ARCHIVE_EXTENSIONS = ['.zip', '.jar'];
 
-export interface AssetOptions extends assets.CopyOptions, cdk.FileCopyOptions, cdk.AssetOptions {
+export interface AssetOptions extends cdk.CopyOptions, cdk.FileCopyOptions, cdk.AssetOptions {
   /**
    * A list of principals that should be able to read this asset from S3.
    * You can use `asset.grantRead(principal)` to grant read permissions later.
@@ -124,8 +121,8 @@ export class Asset extends Construct implements cdk.IAsset {
     const staging = new cdk.AssetStaging(this, 'Stage', {
       ...props,
       sourcePath: path.resolve(props.path),
-      follow: props.followSymlinks ?? toSymlinkFollow(props.follow),
-      assetHash: props.assetHash ?? props.sourceHash,
+      follow: props.followSymlinks,
+      assetHash: props.assetHash,
     });
 
     this.assetHash = staging.assetHash;
@@ -156,11 +153,8 @@ export class Asset extends Construct implements cdk.IAsset {
     this.httpUrl = location.httpUrl;
     this.s3Url = location.httpUrl; // for backwards compatibility
 
-    const kmsKey = location.kmsKeyArn ? kms.Key.fromKeyArn(this, 'Key', location.kmsKeyArn) : undefined;
-
     this.bucket = s3.Bucket.fromBucketAttributes(this, 'AssetBucket', {
       bucketName: this.s3BucketName,
-      encryptionKey: kmsKey,
     });
 
     for (const reader of (props.readers ?? [])) {
