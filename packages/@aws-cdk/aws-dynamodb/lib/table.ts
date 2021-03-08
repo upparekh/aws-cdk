@@ -1516,7 +1516,7 @@ export class Table extends TableBase {
 
     // Permissions in the destination regions (outside of the loop to
     // minimize statements in the policy)
-    onEventHandlerPolicy.grantPrincipal.addToPolicy(new iam.PolicyStatement({
+    onEventHandlerPolicy.grantPrincipal.addToPrincipalPolicy(new iam.PolicyStatement({
       actions: ['dynamodb:*'],
       resources: this.regionalArns,
     }));
