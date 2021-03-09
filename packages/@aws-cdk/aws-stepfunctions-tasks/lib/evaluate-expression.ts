@@ -97,7 +97,7 @@ export class EvaluateExpression extends sfn.TaskStateBase {
 }
 
 function createEvalFn(runtime: lambda.Runtime, scope: Construct) {
-  const code = lambda.Code.asset(path.join(__dirname, `eval-${runtime.name}-handler`));
+  const code = lambda.Code.fromAsset(path.join(__dirname, `eval-${runtime.name}-handler`));
   const lambdaPurpose = 'Eval';
 
   switch (runtime) {
