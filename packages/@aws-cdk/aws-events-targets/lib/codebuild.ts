@@ -40,7 +40,6 @@ export class CodeBuildProject implements events.IRuleTarget {
    */
   public bind(_rule: events.IRule, _id?: string): events.RuleTargetConfig {
     return {
-      id: '',
       arn: this.project.projectArn,
       role: this.props.eventRole || singletonEventRole(this.project, [
         new iam.PolicyStatement({

@@ -120,7 +120,7 @@ export class EcsTask implements events.IRuleTarget {
 
     if (props.role) {
       const role = props.role;
-      this.createEventRolePolicyStatements().forEach(role.addToPolicy.bind(role));
+      this.createEventRolePolicyStatements().forEach(role.addToPrincipalPolicy.bind(role));
       this.role = role;
     } else {
       this.role = singletonEventRole(this.taskDefinition, this.createEventRolePolicyStatements());
@@ -176,7 +176,6 @@ export class EcsTask implements events.IRuleTarget {
       : baseEcsParameters;
 
     return {
-      id: '',
       arn,
       role,
       ecsParameters,

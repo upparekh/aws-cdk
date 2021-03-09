@@ -44,7 +44,6 @@ export class SfnStateMachine implements events.IRuleTarget {
    */
   public bind(_rule: events.IRule, _id?: string): events.RuleTargetConfig {
     return {
-      id: '',
       arn: this.machine.stateMachineArn,
       role: this.role,
       input: this.props.input,
